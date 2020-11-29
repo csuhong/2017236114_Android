@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  Intent intentService = new Intent(this, MyIntentService.class);
                  startService(intentService);
             case R.id.bind_service:
-
                 Intent bindIntent = new Intent(this,MyService.class);
                 bindService(bindIntent, connection, BIND_ABOVE_CLIENT);//绑定服务
                 break;

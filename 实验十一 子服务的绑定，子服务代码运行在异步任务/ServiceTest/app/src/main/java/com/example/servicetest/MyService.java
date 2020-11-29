@@ -17,15 +17,16 @@ public class MyService extends Service {
             return 0;
         }
     }
-    public MyService() {
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         return mBinder;
 
     }
+    public MyService() {
+    }
+
+
     @Override
     public void onCreate(){
         super.onCreate();

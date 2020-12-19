@@ -1,27 +1,27 @@
 package com.example.timetable;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     //星期几
     private RelativeLayout day;
@@ -37,19 +37,43 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //工具条
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        Button button2 = (Button) findViewById(R.id.button2);
+        Button button3 = (Button) findViewById(R.id.button3);
+        button2.setOnClickListener(this);
+        button3.setOnClickListener(this);
         //从数据库读取数据
         loadData();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button2:
+                Intent intent = new Intent(MainActivity.this, AddCourseActivity.class);
+                startActivityForResult(intent, 0);
+                break;
+            case R.id.button3:
+                AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
+                dialog.setTitle("关于");
+                dialog.setMessage("2017236114陈素红");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + v.getId());
+
+        }
+    }
+
+
+
+
+
+
+
+
     //从数据库加载数据
     private void loadData() {
         ArrayList<Course> coursesList = new ArrayList<>(); //课程列表
-        SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("select * from courses", null);
         if (cursor.moveToFirst()) {
             do {
@@ -60,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         cursor.getInt(cursor.getColumnIndex("day")),
                         cursor.getInt(cursor.getColumnIndex("class_start")),
                         cursor.getInt(cursor.getColumnIndex("class_end"))));
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
 
@@ -73,15 +97,15 @@ public class MainActivity extends AppCompatActivity {
 
     //保存数据到数据库
     private void saveData(Course course) {
-        SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
         sqLiteDatabase.execSQL
                 ("insert into courses(course_name, teacher, class_room, day, class_start, class_end) " + "values(?, ?, ?, ?, ?, ?)",
-                        new String[] {course.getCourseName(),
+                        new String[]{course.getCourseName(),
                                 course.getTeacher(),
                                 course.getClassRoom(),
-                                course.getDay()+"",
-                                course.getStart()+"",
-                                course.getEnd()+""}
+                                course.getDay() + "",
+                                course.getStart() + "",
+                                course.getEnd() + ""}
                 );
     }
 
@@ -89,15 +113,15 @@ public class MainActivity extends AppCompatActivity {
     private void createLeftView(Course course) {
         int endNumber = course.getEnd();
         if (endNumber > maxCoursesNumber) {
-            for (int i = 0; i < endNumber-maxCoursesNumber; i++) {
+            for (int i = 0; i < endNumber - maxCoursesNumber; i++) {
                 View view = LayoutInflater.from(this).inflate(R.layout.left_view, null);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(110,180);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(110, 180);
                 view.setLayoutParams(params);
 
                 TextView text = view.findViewById(R.id.class_number_text);
                 text.setText(String.valueOf(++currentCoursesNumber));
 
-                LinearLayout leftViewLayout = leftViewLayout.findViewById();
+                LinearLayout leftViewLayout = findViewById(R.id.left_view_layout);
                 leftViewLayout.addView(view);
             }
             maxCoursesNumber = endNumber;
@@ -112,21 +136,35 @@ public class MainActivity extends AppCompatActivity {
         else {
             int dayId = 0;
             switch (getDay) {
-                case 1: dayId = R.id.monday; break;
-                case 2: dayId = R.id.tuesday; break;
-                case 3: dayId = R.id.wednesday; break;
-                case 4: dayId = R.id.thursday; break;
-                case 5: dayId = R.id.friday; break;
-                case 6: dayId = R.id.saturday; break;
-                case 7: dayId = R.id.weekday; break;
+                case 1:
+                    dayId = R.id.monday;
+                    break;
+                case 2:
+                    dayId = R.id.tuesday;
+                    break;
+                case 3:
+                    dayId = R.id.wednesday;
+                    break;
+                case 4:
+                    dayId = R.id.thursday;
+                    break;
+                case 5:
+                    dayId = R.id.friday;
+                    break;
+                case 6:
+                    dayId = R.id.saturday;
+                    break;
+                case 7:
+                    dayId = R.id.weekday;
+                    break;
             }
             day = findViewById(dayId);
 
             int height = 180;
             final View v = LayoutInflater.from(this).inflate(R.layout.course_list, null); //加载单个课程布局
-            v.setY(height * (course.getStart()-1)); //设置开始高度,即第几节课开始
+            v.setY(height * (course.getStart() - 1)); //设置开始高度,即第几节课开始
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
-                    (ViewGroup.LayoutParams.MATCH_PARENT,(course.getEnd()-course.getStart()+1)*height - 8); //设置布局高度,即跨多少节课
+                    (ViewGroup.LayoutParams.MATCH_PARENT, (course.getEnd() - course.getStart() + 1) * height - 8); //设置布局高度,即跨多少节课
             v.setLayoutParams(params);
             TextView text = v.findViewById(R.id.text_view);
             text.setText(course.getCourseName() + "\n" + course.getTeacher() + "\n" + course.getClassRoom()); //显示课程名
@@ -137,15 +175,15 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     v.setVisibility(View.GONE);//先隐藏
                     day.removeView(v);//再移除课程视图
-                    SQLiteDatabase sqLiteDatabase =  databaseHelper.getWritableDatabase();
-                    sqLiteDatabase.execSQL("delete from courses where course_name = ?", new String[] {course.getCourseName()});
+                    SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+                    sqLiteDatabase.execSQL("delete from courses where course_name = ?", new String[]{course.getCourseName()});
                     return true;
                 }
             });
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar, menu);
         return true;
@@ -162,9 +200,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(this, AboutActivity.class);
                 startActivity(intent1);
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
         return true;
-    }
+    }*/
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -180,3 +222,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+

@@ -18,8 +18,8 @@
         </activity>
 
         <activity
-            android:name=".AboutActivity"
-            android:label="关于"
+            android:name=".AddCourseActivity"
+            android:label="添加"
             android:theme="@style/Theme.AppCompat.Light.Dialog"/>
     </application>
 

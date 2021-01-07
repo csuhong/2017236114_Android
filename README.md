@@ -20,4 +20,7 @@
 
 [实验十一 子服务的绑定，子服务代码运行在异步任务](https://github.com/csuhong/2017236114_Android/tree/master/%E5%AE%9E%E9%AA%8C%E5%8D%81%E4%B8%80%20%E5%AD%90%E6%9C%8D%E5%8A%A1%E7%9A%84%E7%BB%91%E5%AE%9A%EF%BC%8C%E5%AD%90%E6%9C%8D%E5%8A%A1%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E5%9C%A8%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1)
 
-[实验十二Material Design]()
+[实验十二Material Design](https://github.com/csuhong/2017236114_Android/tree/master/%E5%AE%9E%E9%AA%8C%E5%8D%81%E4%BA%8C%20Material%20Design)
+
+[期末大作业](https://github.com/csuhong/2017236114_Android/tree/master/%E6%9C%9F%E6%9C%AB%E5%A4%A7%E4%BD%9C%E4%B8%9A)
+
